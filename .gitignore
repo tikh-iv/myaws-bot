@@ -1,0 +1,9 @@
+/.venv/*
+/.idea/*
+/.idea/dataSources/4c889945-6c48-4e09-9f00-10d569295d8b.xml
+/.idea/dataSources/466dd30b-763f-483a-96e5-83fefe15acd8.xml
+/.idea/dataSources.local.xml
+/.idea/dataSources/4c889945-6c48-4e09-9f00-10d569295d8b/storage_v2/_src_/schema/main.uQUzAA.meta
+/.idea/dataSources/466dd30b-763f-483a-96e5-83fefe15acd8/storage_v2/_src_/schema/main.uQUzAA.meta
+/telegram_bot.sqlite
+/project.tar
