@@ -10,7 +10,7 @@ class Configs:
         self.db_name = os.getenv('DB_NAME', 'sqlite:///telegram_bot.sqlite')
         self.base_url = os.getenv('BASE_URL', 'https://openrouter.ai/api/v1')
         self.gpt_api_key = os.getenv('GPT_API_KEY', 'default_api_key')
-        self.model = os.getenv('MODEL', 'openai/gpt-4o-mini')
+        self.model = os.getenv('MODEL', 'google/gemini-flash-1.5')
         self.system_context_file = os.getenv('SYSTEM_CONTEXT', '')
         self.bot_names = os.getenv('BOT_NAMES', 'MeowSavbot,pawnpaw').split(',')
         self.bot_admins = os.getenv('bot_admin', '293754044').split(',')
