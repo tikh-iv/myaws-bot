@@ -14,5 +14,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - name: DockerHub login
+      run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      run: |
+        docker build . -t ${{ secrets.DOCKER_HUB_USERNAME }}/telegram-bot:latest
+        docker tag ${{ secrets.DOCKER_HUB_USERNAME }}/telegram-bot:latest ${{ secrets.DOCKER_HUB_USERNAME }}/telegram-bot:$(date +%Y%m%d%H%M)
+    - name: Upload image to Docker Hub
+      run: |
+        docker push ${{ secrets.DOCKER_HUB_USERNAME }}/telegram-bot:latest
+        docker push ${{ secrets.DOCKER_HUB_USERNAME }}/telegram-bot:$(date +%Y%m%d%H%M)
