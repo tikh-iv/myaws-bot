@@ -1,0 +1,28 @@
+name: Deploy service
+
+on:
+  workflow_run:
+    workflows: ["Docker Image CI"]
+    types:
+      - completed
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Install cert
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+        chmod 600 ~/.ssh/deploy_key
+        ssh-keyscan -H your-server-ip >> ~/.ssh/known_hosts
+    
+    - name: Подключение к серверу и обновление контейнера
+      run: |
+        ssh -i ~/.ssh/deploy_key {{ secrets.SERVER_USER }}@{{ secrets.SERVER }} << 'EOF'
+          touch test
+          ls -la
+        EOF
