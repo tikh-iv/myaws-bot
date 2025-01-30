@@ -28,6 +28,9 @@ jobs:
     - name: Подключение к серверу и обновление контейнера
       run: |
         ssh -p 8822 -i ~/.ssh/deploy_key ${{ secrets.SERVER_USER }}@${{ secrets.SERVER }} << 'EOF'
+           docker stop myaws || true
+          docker rm myaws || true
+          docker pull eevarn/myaws-bot
           docker run -d \
             --name myaws \
             --restart=always \
