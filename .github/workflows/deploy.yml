@@ -28,6 +28,11 @@ jobs:
     - name: Подключение к серверу и обновление контейнера
       run: |
         ssh -p 8822 -i ~/.ssh/deploy_key ${{ secrets.SERVER_USER }}@${{ secrets.SERVER }} << 'EOF'
-          touch test
-          ls -la
+          docker run -d \
+            --name myaws \
+            --restart=always \
+            -e GPT_API_KEY=${{ GPT_API_KEY }} \
+            -e TELEGRAM_API_TOKEN=${{ TELEGRAM_API_TOKEN }}
+            -v /home/ivan/myaws_db/telegram_bot.sqlite:/telegram_bot.sqlite \
+            eevarn/k8sphp
         EOF
