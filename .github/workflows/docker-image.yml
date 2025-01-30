@@ -18,8 +18,8 @@ jobs:
       run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
     - name: Build the Docker image
       run: |
-        docker build . -t ${{ secrets.DOCKER_HUB_USERNAME }}/telegram-bot:latest -t ${{ secrets.DOCKER_HUB_USERNAME }}/telegram-bot:0.0.2
+        docker build . -t ${{ secrets.DOCKER_HUB_USERNAME }}/telegram-bot:latest -t ${{ secrets.DOCKER_HUB_USERNAME }}/myaws-bot:0.0.1
     - name: Upload image to Docker Hub
       run: |
-        docker push ${{ secrets.DOCKER_HUB_USERNAME }}/telegram-bot:latest
-        docker push ${{ secrets.DOCKER_HUB_USERNAME }}/telegram-bot:0.0.2
+        docker push ${{ secrets.DOCKER_HUB_USERNAME }}/myaws-bot:latest
+        docker push ${{ secrets.DOCKER_HUB_USERNAME }}/myaws-bot:0.0.1
