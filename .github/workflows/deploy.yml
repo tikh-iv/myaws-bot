@@ -32,7 +32,7 @@ jobs:
             --name myaws \
             --restart=always \
             -e GPT_API_KEY=${{ secrets.GPT_API_KEY }} \
-            -e TELEGRAM_API_TOKEN=${{ secrets.TELEGRAM_API_TOKEN }}
+            -e TELEGRAM_API_TOKEN=${{ secrets.TELEGRAM_API_TOKEN }} \
             -v ${{ secrets.HOST_DB_PATH }}/telegram_bot.sqlite \
             eevarn/k8sphp
         EOF
