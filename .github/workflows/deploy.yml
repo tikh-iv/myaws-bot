@@ -15,6 +15,12 @@ jobs:
     steps:
     - name: Install cert
       run: |
+        echo "${{ secrets.SERVER }}"
+        nslookup "${{ secrets.SERVER }}"
+        ping -c 4 "${{ secrets.SERVER }}"
+
+    - name: Install cert
+      run: |
         mkdir -p ~/.ssh
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
         chmod 600 ~/.ssh/deploy_key
