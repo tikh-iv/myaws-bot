@@ -36,6 +36,6 @@ jobs:
             --restart=always \
             -e GPT_API_KEY=${{ secrets.GPT_API_KEY }} \
             -e TELEGRAM_API_TOKEN=${{ secrets.TELEGRAM_API_TOKEN }} \
-            -v ${{ secrets.HOST_DB_PATH }}/telegram_bot.sqlite \
+            -v ${{ secrets.HOST_DB_PATH }}:/telegram_bot.sqlite \
             eevarn/myaws-bot
         EOF
