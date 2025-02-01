@@ -23,12 +23,16 @@ jobs:
       run: |
         VERSION=$(git describe --tags --abbrev=0 | sed -E 's/^v([0-9]+\.[0-9]+\.[0-9]+)$/\1/')
         echo "VERSION=$VERSION" >> $GITHUB_ENV
+        # Добавление вывода для дебага
+        echo "Extracted version: $VERSION"  # Это вывод для проверки значения переменной VERSION
 
     - name: Build the Docker image
       run: |
+        echo "Building Docker image with tag: ${{ env.VERSION }}"  # Печать версии перед сборкой
         docker build . -t ${{ secrets.DOCKER_HUB_USERNAME }}/myaws-bot:latest -t ${{ secrets.DOCKER_HUB_USERNAME }}/myaws-bot:${{ env.VERSION }}
 
     - name: Upload image to Docker Hub
       run: |
+        echo "Pushing Docker image with tags: ${{ secrets.DOCKER_HUB_USERNAME }}/myaws-bot:latest and ${{ secrets.DOCKER_HUB_USERNAME }}/myaws-bot:${{ env.VERSION }}"  # Печать тэгов перед пушем
         docker push ${{ secrets.DOCKER_HUB_USERNAME }}/myaws-bot:latest
         docker push ${{ secrets.DOCKER_HUB_USERNAME }}/myaws-bot:${{ env.VERSION }}
