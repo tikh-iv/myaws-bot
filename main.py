@@ -2,6 +2,7 @@ import os
 from bot import Bot
 from db import TelegramDBService
 from gpt_model import GPTModel
+from image_yandex import ImageYandex
 
 
 class Configs:
@@ -18,6 +19,8 @@ class Configs:
                                                           'CAACAgIAAxkBAAJxoWbS7QJxGh1orFVDYG98rdgedaQdAAKtIgACMLyZSPK5-lHyC_4ONQQ,'
                                                           'CAACAgIAAxkBAAJxpGbS7RSEIo-oSq_PLeZc_gQ59OaNAAJhIwAC0onxSAdgKmaBpct4NQQ,'
                                                           'CAACAgIAAxkBAAJxp2bS7SFIN03GCx-fwmfrEneBgQVBAALPPgACfkfwSMBh8Zf6fDGsNQQ'.split(','))
+        self.yandex_folder_id = os.getenv('YANDEX_FOLDER_ID', '')
+        self.yandex_auth = os.getenv('YANDEX_AUTH', '')
 
         if os.path.exists(self.system_context_file):
             with open(self.system_context_file, 'r') as f:
@@ -36,10 +39,14 @@ if __name__ == '__main__':
     else:
         tg_db.update_settings(system_context=configs.system_context)
 
+    image_yandex = ImageYandex(folder_id=configs.yandex_folder_id,
+                               auth=configs.yandex_auth)
+
     gpt = GPTModel(base_url=configs.base_url,
                    gpt_api_key=configs.gpt_api_key,
                    system_context=configs.system_context,
-                   model=configs.model)
+                   model=configs.model,
+                   image_yandex=image_yandex)
 
     bot = Bot(api_key=configs.telegram_api_token,
               tg_db=tg_db,
