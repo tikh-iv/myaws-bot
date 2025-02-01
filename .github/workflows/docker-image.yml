@@ -15,19 +15,17 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Fetch all tags
-      run: git fetch --tags  # Явно загружаем все теги
+    - id: get_version
+      name: Get version
+      uses: jannemattila/get-version-from-tag@v4
+
+    - name: Display version
+      run: |
+        VERSION=$(echo "${{ steps.get_version.outputs.version }}")
+        echo $VERSION
 
     - name: DockerHub login
       run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
-
-    - name: Extract version from tag
-      id: version
-      run: |
-        VERSION=$(git describe --tags --abbrev=0 | sed -E 's/^v([0-9]+\.[0-9]+\.[0-9]+)$/\1/')
-        echo "VERSION=$VERSION" >> $GITHUB_ENV
-        # Добавление вывода для дебага
-        echo "Extracted version: $VERSION"  # Это вывод для проверки значения переменной VERSION
 
     - name: Build the Docker image
       run: |
