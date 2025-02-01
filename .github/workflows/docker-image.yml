@@ -1,25 +1,37 @@
 name: Docker Image CI
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+  release:
+    types:
+      - edited
+      - released
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
+
+    - id: get_version
+      name: Get version
+      uses: jannemattila/get-version-from-tag@v4
+
+    - name: Display version
+      run: |
+        VERSION=$(echo "${{ steps.get_version.outputs.version }}")
+        echo $VERSION
+
     - name: DockerHub login
       run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
+
     - name: Build the Docker image
       run: |
-        docker build . -t ${{ secrets.DOCKER_HUB_USERNAME }}/myaws-bot:latest -t ${{ secrets.DOCKER_HUB_USERNAME }}/myaws-bot:0.0.1
+        echo "Building Docker image with tag: ${{ env.VERSION }}"  # Печать версии перед сборкой
+        docker build . -t ${{ secrets.DOCKER_HUB_USERNAME }}/myaws-bot:latest -t ${{ secrets.DOCKER_HUB_USERNAME }}/myaws-bot:${{ steps.get_version.outputs.version }}
+
     - name: Upload image to Docker Hub
       run: |
+        echo "Pushing Docker image with tags: ${{ secrets.DOCKER_HUB_USERNAME }}/myaws-bot:latest and ${{ secrets.DOCKER_HUB_USERNAME }}/myaws-bot:${{ steps.get_version.outputs.version }}
         docker push ${{ secrets.DOCKER_HUB_USERNAME }}/myaws-bot:latest
-        docker push ${{ secrets.DOCKER_HUB_USERNAME }}/myaws-bot:0.0.1
+        docker push ${{ secrets.DOCKER_HUB_USERNAME }}/myaws-bot:${{ steps.get_version.outputs.version }}
