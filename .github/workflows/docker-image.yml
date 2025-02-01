@@ -3,23 +3,32 @@ name: Docker Image CI
 on:
   push:
     branches: [ "main" ]
+    tags:
+      - 'v[0-9]*'
   pull_request:
     branches: [ "main" ]
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
+
     - name: DockerHub login
       run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
+
+    - name: Extract version from tag
+      id: version
+      run: |
+        VERSION=$(git describe --tags --abbrev=0 | sed -E 's/^v([0-9]+\.[0-9]+\.[0-9]+)$/\1/')
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
+
     - name: Build the Docker image
       run: |
-        docker build . -t ${{ secrets.DOCKER_HUB_USERNAME }}/myaws-bot:latest -t ${{ secrets.DOCKER_HUB_USERNAME }}/myaws-bot:0.0.1
+        docker build . -t ${{ secrets.DOCKER_HUB_USERNAME }}/myaws-bot:latest -t ${{ secrets.DOCKER_HUB_USERNAME }}/myaws-bot:${{ env.VERSION }}
+
     - name: Upload image to Docker Hub
       run: |
         docker push ${{ secrets.DOCKER_HUB_USERNAME }}/myaws-bot:latest
-        docker push ${{ secrets.DOCKER_HUB_USERNAME }}/myaws-bot:0.0.1
+        docker push ${{ secrets.DOCKER_HUB_USERNAME }}/myaws-bot:${{ env.VERSION }}
