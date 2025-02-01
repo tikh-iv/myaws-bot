@@ -1,12 +1,10 @@
 name: Docker Image CI
 
 on:
-  push:
-    branches: [ "main" ]
-    tags:
-      - 'v[0-9]*'
-  pull_request:
-    branches: [ "main" ]
+  release:
+    types:
+      - edited
+      - released
 
 jobs:
   build:
@@ -30,10 +28,10 @@ jobs:
     - name: Build the Docker image
       run: |
         echo "Building Docker image with tag: ${{ env.VERSION }}"  # Печать версии перед сборкой
-        docker build . -t ${{ secrets.DOCKER_HUB_USERNAME }}/myaws-bot:latest -t ${{ secrets.DOCKER_HUB_USERNAME }}/myaws-bot:${{ env.VERSION }}
+        docker build . -t ${{ secrets.DOCKER_HUB_USERNAME }}/myaws-bot:latest -t ${{ secrets.DOCKER_HUB_USERNAME }}/myaws-bot:${{ steps.get_version.outputs.version }}
 
     - name: Upload image to Docker Hub
       run: |
-        echo "Pushing Docker image with tags: ${{ secrets.DOCKER_HUB_USERNAME }}/myaws-bot:latest and ${{ secrets.DOCKER_HUB_USERNAME }}/myaws-bot:${{ env.VERSION }}"  # Печать тэгов перед пушем
+        echo "Pushing Docker image with tags: ${{ secrets.DOCKER_HUB_USERNAME }}/myaws-bot:latest and ${{ secrets.DOCKER_HUB_USERNAME }}/myaws-bot:${{ steps.get_version.outputs.version }}
         docker push ${{ secrets.DOCKER_HUB_USERNAME }}/myaws-bot:latest
-        docker push ${{ secrets.DOCKER_HUB_USERNAME }}/myaws-bot:${{ env.VERSION }}
+        docker push ${{ secrets.DOCKER_HUB_USERNAME }}/myaws-bot:${{ steps.get_version.outputs.version }}
