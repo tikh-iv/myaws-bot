@@ -25,15 +25,13 @@ class Configs:
         else:
             self.system_context = ''
 
-
-
 if __name__ == '__main__':
     configs = Configs()
 
     tg_db = TelegramDBService(db_name=configs.db_name)
 
     # Если контекст по умолчанию пустой берем его из таблицы настроек, если не пустой обновляем БД
-    if configs.system_context:
+    if not configs.system_context:
         configs.system_context = tg_db.get_settings()['system_context']
     else:
         tg_db.update_settings(system_context=configs.system_context)
