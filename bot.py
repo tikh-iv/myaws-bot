@@ -89,19 +89,19 @@ class Bot:
 
     def answer(self, message):
         self._save_message(message)
-        conversation = self._get_messages(message.chat.id)
-        answer = self.gpt.conversation_generate_answer(conversation,
-                                                       max_tokens=self.max_tokens())
-        self._send_or_no(message, answer)
+
+        self._send_or_no(message)
 
     def _send_or_no(self,
-                    message,
-                    answer):
+                    message):
         if message.reply_to_message is not None and \
                 message.reply_to_message.from_user.username in self.bot_names or \
                 random.random() <= self.response_probability() or \
                 any(keyword in message.text.lower() for keyword in self.bot_names):
 
+            conversation = self._get_messages(message.chat.id)
+            answer = self.gpt.conversation_generate_answer(conversation,
+                                                           max_tokens=self.max_tokens())
             if random.random() <= self.message_response_probability():
                 sent_message = self.bot.reply_to(message, answer)
             else:
