@@ -11,7 +11,7 @@ class Bot:
                  gpt: GPTModel,
                  bot_names: list,
                  myaws_stickers: list,
-                 bot_admins: str):
+                 bot_admins: list[str]):
         self.bot = telebot.TeleBot(api_key)
         self.bot.message_handler(commands=['help', 'start'])(self.send_welcome)
         self.bot.message_handler(commands=['settings'])(self.update_setting)
