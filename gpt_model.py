@@ -88,7 +88,6 @@ class GPTModel:
                 model=self.model,
                 messages=messages,
                 max_tokens=max_tokens,
-                tools=self.tools,
             )
         except Exception as e:
             return f"Блин, хз, а как решить проблему {e}"
