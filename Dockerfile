@@ -13,7 +13,7 @@ ENV TELEGRAM_API_TOKEN=default_api_key
 ENV DB_NAME=sqlite:///telegram_bot.sqlite
 ENV BASE_URL=https://openrouter.ai/api/v1
 ENV GPT_API_KEY=default_api_key
-ENV MODEL=deepseek/deepseek-chat
+ENV MODEL=google/gemini-flash-1.5
 ENV SYSTEM_CONTEXT=./context.txt
 ENV BOT_NAMES=MeowSavbot,pawnpaw
 
